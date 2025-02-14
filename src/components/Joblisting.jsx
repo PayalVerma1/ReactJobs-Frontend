@@ -1,12 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import {FaMapMarker} from "react-icons/fa"
-const Joblisting = ({job}) => {
-const [fullDescription, setFullDescription] = useState(false);
- let description = job.description;
- if(!fullDescription){
-    description=description.substring(0,90)+'...';
- }
+import { FaMapMarker } from "react-icons/fa";
+import { Link } from "react-router-dom";
+const Joblisting = ({ job }) => {
+  const [fullDescription, setFullDescription] = useState(false);
+  let description = job.description;
+  if (!fullDescription) {
+    description = description.substring(0, 90) + "...";
+  }
   return (
     <>
       <div className="bg-white rounded-xl shadow-md relative">
@@ -17,8 +18,11 @@ const [fullDescription, setFullDescription] = useState(false);
           </div>
 
           <div className="mb-5">{description}</div>
-          <button className="text-indigo-500 mb-5" onClick={()=>setFullDescription(!fullDescription)}>
-            {fullDescription ? "Show Less":"Show More"}
+          <button
+            className="text-indigo-500 mb-5"
+            onClick={() => setFullDescription(!fullDescription)}
+          >
+            {fullDescription ? "Show Less" : "Show More"}
           </button>
 
           <h3 className="text-indigo-500 mb-2">{job.salary}</h3>
@@ -27,15 +31,15 @@ const [fullDescription, setFullDescription] = useState(false);
 
           <div className="flex flex-col lg:flex-row justify-between mb-4">
             <div className="text-orange-700 mb-3">
-             <FaMapMarker className="inline mr-2 text-lg mb-1"/>
+              <FaMapMarker className="inline mr-2 text-lg mb-1" />
               {job.location}
             </div>
-            <a
-              href="job.html"
+            <Link
+              to={`/jobs/${job.id}`} // Use Link instead of <a>
               className="h-[36px] bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-center text-sm"
             >
               Read More
-            </a>
+            </Link>
           </div>
         </div>
       </div>

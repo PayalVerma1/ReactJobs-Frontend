@@ -8,12 +8,14 @@ import {Route,createBrowserRouter,createRoutesFromElements,RouterProvider} from 
 import Mainlayout from './layouts/Mainlayout';
 import Homepage from './Pages/Homepage';
 import Jobspage from './Pages/Jobspage';
-import Addjobs from './Pages/Addjobs';
+import JobPage ,{jobLoader} from './Pages/JobPage';
+import Notfound from './Pages/Notfound';
 const router=createBrowserRouter(createRoutesFromElements(
   <Route path='/' element={<Mainlayout/>}>
     <Route index element={<Homepage/>}/>
     <Route path='/jobs' element={<Jobspage/>}/>
-    <Route path='/addjobs' element={<Addjobs/>}/>
+    <Route path='/jobs/:id' element={<JobPage/>} loader={jobLoader}/>
+    <Route path='*' element={<Notfound/>}/>
   </Route>,
 ));
 const App = () => {

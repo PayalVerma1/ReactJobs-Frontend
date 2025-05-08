@@ -12,15 +12,23 @@ const Joblistings = ({ isHome = false }) => {
       try {
         const res = await fetch(apiUrl);
         const data = await res.json();
-        setJobs(data);
-      } catch (error) {
-        console.log("Error fetching data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+          // Ensure the response is an array
+          if (Array.isArray(data)) {
+            setJobs(data);
+          } else {
+            console.error("Expected an array but got:", data);
+            setJobs([]); // Fallback to an empty array
+          }
+        } catch (error) {
+          console.error("Error fetching data", error);
+          setJobs([]); // Fallback to an empty array
+        } finally {
+          setLoading(false);
+        }
+      };
+  
     fetchjobs();
-  }, []);
+  }, [isHome]);
   const joblistings = isHome ? jobs.slice(0, 3) : jobs;
   // console.log(recentjobs)
   return (

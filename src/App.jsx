@@ -13,9 +13,12 @@ import Notfound from './Pages/Notfound';
 import AddJobPage from './Pages/AddJobPage';
 import Editjob from './Pages/Editjob';
 
-// ✅ Define the loader function for Editjob
+// Base API URL - keep it consistent
+const API_BASE_URL = '/api';
+
+// Loader for the edit job page
 const editJobLoader = async ({ params }) => {
-  const res = await fetch(`/api/jobs/${params.id}`);
+  const res = await fetch(`${API_BASE_URL}/addjobs/${params.id}`);
   if (!res.ok) {
     throw new Error("Failed to load job data");
   }
@@ -24,50 +27,81 @@ const editJobLoader = async ({ params }) => {
 
 const App = () => {
   const addJob = async (newjob) => {
-    const res = await fetch('/api/jobs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newjob),
-    });
-    return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/addjobs/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newjob),
+      });
+      
+      if (!res.ok) {
+        throw new Error('Failed to add job');
+      }
+      
+      return await res.json();
+    } catch (error) {
+      console.error('Error adding job:', error);
+      throw error; // Re-throw to be handled by the component
+    }
   };
 
   const deleteJob = async (id) => {
-    console.log('delete', id);
     try {
-      const res = await fetch(`/api/jobs/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/addjobs/${id}`, {
         method: 'DELETE',
       });
+      
       if (!res.ok) {
         throw new Error('Failed to delete job');
       }
+      
+      return true; // Return success indicator
     } catch (error) {
-      console.error(error);
+      console.error('Error deleting job:', error);
+      throw error;
     }
   };
 
   const updateJob = async (job) => {
-    const res = await fetch(`/api/jobs/${job.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(job),
-    });
-    return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/addjobs/${job.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(job),
+      });
+      
+      if (!res.ok) {
+        throw new Error('Failed to update job');
+      }
+      
+      return await res.json(); 
+    } catch (error) {
+      console.error('Error updating job:', error);
+      throw error;
+    }
   };
+
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Mainlayout />}>
         <Route index element={<Homepage />} />
-        <Route path="/jobs" element={<Jobspage />} />
+        <Route path="/jobs" element={<Jobspage />} loader={jobLoader} />
         <Route path="/addjobs" element={<AddJobPage addjobsubmit={addJob} />} />
-        <Route path="/jobs/:id" element={<JobPage deleteJob={deleteJob} />} loader={jobLoader} />
-        {/* ✅ Added loader for Editjob */}
-        <Route path="/edit-job/:id" element={<Editjob updatejobsubmit={updateJob} />} loader={editJobLoader} />
+        <Route 
+          path="/jobs/:id" 
+          element={<JobPage deleteJob={deleteJob} />} 
+          loader={jobLoader} 
+        />
+        <Route 
+          path="/edit-job/:id" 
+          element={<Editjob updatejobsubmit={updateJob} />} 
+          loader={editJobLoader} 
+        />
         <Route path="*" element={<Notfound />} />
       </Route>
     )

@@ -4,6 +4,18 @@ import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaMapMarker } from "react-icons/fa";
 import { toast } from "react-toastify";
+export const jobLoader = async ({ params }) => {
+  try {
+    const res = await fetch(`/api/jobs/${params.id}`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch job with ID ${params.id}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error('Error loading job:', error);
+    throw error;
+  }
+};
 const JobPage = ({deleteJob}) => {
   const { id } = useParams();
   const navigate=useNavigate();
@@ -112,10 +124,6 @@ const JobPage = ({deleteJob}) => {
     </>
   )
 };
-const jobLoader = async ({ params }) => {
-  const res = await fetch(`/api/jobs/${params.id}`);
-  const data = await res.json();
-  return data;
-};
 
-export { JobPage as default, jobLoader };
+
+export { JobPage as default };

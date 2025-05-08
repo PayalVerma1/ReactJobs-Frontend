@@ -11,7 +11,7 @@ import Jobspage from './Pages/Jobspage';
 import JobPage, { jobLoader } from './Pages/JobPage';
 import Notfound from './Pages/Notfound';
 import AddJobPage from './Pages/AddJobPage';
-import Editjob from './Pages/Editjob';
+import Editjob from './Pages/EditJob.jsx';
 
 // Base API URL - keep it consistent
 const API_BASE_URL = '/api';

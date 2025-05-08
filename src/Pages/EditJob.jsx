@@ -126,7 +126,7 @@ const Editjob = ({updatejobsubmit}) => {
               <input
                 type='text'
                 id='location'
-                name='location'
+                naame='location'
                 className='border rounded w-full py-2 px-3 mb-2'
                 placeholder='Company Location'
                 required  
